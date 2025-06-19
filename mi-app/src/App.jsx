@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react'
+import MealForm from './components/MealForm'
+import MealList from './components/MealList'
+import StatsGraph from './components/StatsGraph'
+import GoalsManager from './components/GoalsManager'
+import AlertBanner from './components/AlertBanner'
+import RecipeSuggestions from './components/RecipeSuggestions'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [meals, setMeals] = React.useState([])
+  const [goals, setGoals] = React.useState({
+    agua: 8,
+    azucar: 3,
+  })
+  const [alerts, setAlerts] = React.useState([])
+
+  React.useEffect(() => {
+    // Cargar datos del localStorage al inicio
+    const storedMeals = localStorage.getItem('alimentacionConscienteData')
+    if(storedMeals) setMeals(JSON.parse(storedMeals))
+  }, [])
+
+  // Actualizar LocalStorage y estado
+  function addMeal(meal) {
+    const newMeals = [...meals, meal]
+    setMeals(newMeals)
+    localStorage.setItem('alimentacionConscienteData', JSON.stringify(newMeals))
+  }
+
+  function updateMeal(updatedMeal) {
+    const updated = meals.map(m => (m.id === updatedMeal.id ? updatedMeal : m))
+    setMeals(updated)
+    localStorage.setItem('alimentacionConscienteData', JSON.stringify(updated))
+  }
+
+  function deleteMeal(id) {
+    const filtered = meals.filter(m => m.id !== id)
+    setMeals(filtered)
+    localStorage.setItem('alimentacionConscienteData', JSON.stringify(filtered))
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="container my-4">
+      <h1 className="text-center mb-4">Gestor de Alimentación Consciente</h1>
+      <MealForm onAdd={addMeal} />
+      <MealList meals={meals} onUpdate={updateMeal} onDelete={deleteMeal} />
+      <GoalsManager goals={goals} setGoals={setGoals} />
+      <AlertBanner meals={meals} goals={goals} />
+      <StatsGraph meals={meals} />
+      <RecipeSuggestions />
+    </div>
   )
 }
-
-export default App
