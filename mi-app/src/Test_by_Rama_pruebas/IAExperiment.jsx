@@ -10,9 +10,7 @@ export default function IAExperiments() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          'https://api.quotable.io/random?tags=inspirational'
-        )
+        const res = await axios.get('https://dog.ceo/api/breeds/image/random')
         setData(res.data)
         setError(null)
       } catch {
@@ -22,7 +20,6 @@ export default function IAExperiments() {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [])
 
@@ -48,10 +45,15 @@ export default function IAExperiments() {
       )}
 
       {!loading && data && !error && (
-        <blockquote className="blockquote border-start border-4 border-primary ps-3">
-          <p className="mb-2 fst-italic">"{data.content}"</p>
-          <footer className="blockquote-footer text-end">{data.author}</footer>
-        </blockquote>
+        <div className="text-center">
+          <h3>Imagen aleatoria de perro</h3>
+          <img
+            src={data.message}
+            alt="Perro aleatorio"
+            className="img-fluid rounded"
+            style={{ maxHeight: 300 }}
+          />
+        </div>
       )}
     </section>
   )
