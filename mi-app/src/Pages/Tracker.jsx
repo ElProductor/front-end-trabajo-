@@ -1,7 +1,7 @@
 import React from 'react'
 import MealForm from '../components/MealForm'
 import MealList from '../components/MealList'
-import IAExperiments from '../tests/IAExperiments'
+import IAExperiments from './Test_by_Rama_pruebas/IAExperiments'
 
 export default function Tracker({ meals, setMeals, onAdd, onUpdate, onDelete }) {
   return (

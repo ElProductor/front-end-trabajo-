@@ -1,4 +1,4 @@
-import IAExperiments from './tests/IAExperiments'
+import IAExperiments from './Test_by_Rama_pruebas/IAExperiments'
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
