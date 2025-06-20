@@ -1,3 +1,4 @@
+import IAExperiments from './tests/IAExperiments'
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -24,6 +25,7 @@ function App() {
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
+        <IAExperiments />
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
