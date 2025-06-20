@@ -8,44 +8,51 @@ export default function IAExperiments() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    // Simulación: Llamada a una IA externa (ejemplo: API de frases motivacionales)
-    axios
-      .get('https://api.quotable.io/random?tags=inspirational')
-      .then(res => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          'https://api.quotable.io/random?tags=inspirational'
+        )
         setData(res.data)
-        setLoading(false)
-      })
-      .catch(err => {
+        setError(null)
+      } catch {
         setError('Error al conectar con la IA externa.')
+        setData(null)
+      } finally {
         setLoading(false)
-      })
+      }
+    }
+
+    fetchData()
   }, [])
 
   return (
-    <div className="container my-4">
+    <section className="container my-4" aria-live="polite" aria-busy={loading}>
       <h2 className="mb-3 d-flex align-items-center gap-2">
-        <Brain size={24} />
-        Módulo Experimental de IA
+        <Brain size={24} aria-hidden="true" />
+        <span>Módulo Experimental de IA</span>
       </h2>
 
       {loading && (
-        <p className="text-muted d-flex align-items-center gap-2">
-          <Loader className="spinner-border spinner-border-sm" /> Cargando reflexión...
+        <p className="text-muted d-flex align-items-center gap-2" role="status">
+          <Loader className="spinner-border spinner-border-sm" aria-hidden="true" />
+          <span>Cargando reflexión...</span>
         </p>
       )}
 
-      {error && (
-        <p className="text-danger d-flex align-items-center gap-2">
-          <AlertTriangle size={18} /> {error}
+      {error && !loading && (
+        <p className="text-danger d-flex align-items-center gap-2" role="alert">
+          <AlertTriangle size={18} aria-hidden="true" />
+          <span>{error}</span>
         </p>
       )}
 
-      {data && (
-        <blockquote className="blockquote">
-          <p className="mb-2">"{data.content}"</p>
-          <footer className="blockquote-footer">{data.author}</footer>
+      {!loading && data && !error && (
+        <blockquote className="blockquote border-start border-4 border-primary ps-3">
+          <p className="mb-2 fst-italic">"{data.content}"</p>
+          <footer className="blockquote-footer text-end">{data.author}</footer>
         </blockquote>
       )}
-    </div>
+    </section>
   )
 }
